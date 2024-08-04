@@ -8,10 +8,11 @@ import os
 import subprocess
 import sys
 from http import HTTPStatus
-from flask import Flask, request, jsonify, make_response, redirect, url_for
+from flask import Flask, request, jsonify, make_response, redirect, url_for, render_template
+from dduk.core import Repository
+from src.datamanager import DataManager
 from src.serviceinfo import ServiceInfo, ServiceState
 from src.servicemanager import ServiceManager
-from dduk.core import Repository
 
 
 #--------------------------------------------------------------------------------
@@ -28,9 +29,14 @@ class NetworkManager:
 	# 생성됨.
 	#--------------------------------------------------------------------------------
 	def __init__(self) -> None:
-		self.__app = Flask("DDUK-SERVICES")
-		self.__app.add_url_rule("/", "VoidDocument", self.VoidDocument, methods = ["GET"])
-		self.__app.add_url_rule("/view", "ViewDocument", self.ViewDocument, methods = ["GET"])
+		
+		# 데이터 매니저 설정.
+		dataManager = Repository.Get(DataManager)
+		templatesPath = dataManager.GetResPathWithRelativePath("templates")
+
+		self.__app = Flask("DDUK-SERVICES", template_folder = templatesPath)
+		self.__app.add_url_rule("/", "MainDocument", self.VoidDocument, methods = ["GET"])
+		self.__app.add_url_rule("/execute", "Execute", self.Execute, methods = ["POST"])
 		self.__app.add_url_rule("/restart", "RestartService", self.RestartService, methods = ["GET"])
 		self.__app.add_url_rule("/start", "StartService", self.StartService, methods = ["GET"])
 		self.__app.add_url_rule("/stop", "StopService", self.StopService, methods = ["GET"])
@@ -49,14 +55,24 @@ class NetworkManager:
 	# 빈 화면.
 	#--------------------------------------------------------------------------------
 	def VoidDocument(self) -> Union[str, Tuple[str, int]]:
-		return redirect(url_for("ViewDocument"))
+		# return redirect(url_for("ViewDocument"))
+		return render_template("index.html", output = None)
 
 
 	#--------------------------------------------------------------------------------
-	# 뷰 화면.
+	# 실행.
 	#--------------------------------------------------------------------------------
-	def ViewDocument(self) -> Union[str, Tuple[str, int]]:
-		return "", HTTPStatus.OK
+	def Execute(self) -> Union[str, Tuple[str, int]]:
+		command = request.json.get("command") # request.form["command"]
+		result = str()
+		try:
+			process = subprocess.Popen([command], stdout = subprocess.PIPE, stderr = subprocess.PIPE, text = True)
+			result = process.stdout + process.stderr
+		except Exception as exception:
+			result = str(exception)
+
+		# return render_template("index.html", output = result)
+		return jsonify({ "output" : result })
 
 
 	#--------------------------------------------------------------------------------

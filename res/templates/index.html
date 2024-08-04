@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>웹 기반 CLI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+            color: #00FF00;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        #terminal {
+            flex-grow: 1;
+            padding: 10px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        #commandInput {
+            width: 100%;
+            background-color: #000000;
+            color: #00FF00;
+            border: none;
+            outline: none;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div id="terminal"></div>
+    <input id="commandInput" type="text" autocomplete="off">
+    <script>
+        const terminal = document.getElementById('terminal');
+        const commandInput = document.getElementById('commandInput');
+
+        function addOutput(text) {
+            const outputElement = document.createElement('div');
+            outputElement.textContent = text;
+            terminal.appendChild(outputElement);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        commandInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const command = e.target.value;
+                e.target.value = '';
+                addOutput(`> ${command}`);
+                fetch('/execute', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({command: command})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    addOutput(data.output);
+                })
+                .catch(error => {
+                    addOutput(`Error: ${error}`);
+                });
+            }
+        });
+
+        // Focus the input field when the page loads
+        commandInput.focus();
+
+        // Focus the input field when the terminal is clicked
+        terminal.addEventListener('click', () => {
+            commandInput.focus();
+        });
+    </script>
+</body>
+</html>

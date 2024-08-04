@@ -6,9 +6,9 @@ from typing import Any, Final, Optional, Type, TypeVar, Union, Tuple, List, Dict
 import builtins
 from dduk.core import Repository
 from src.datamanager import DataManager
-from .manifestparser import ManifestParser
-from .servicemanager import ServiceManager
-from .networkmanager import NetworkManager
+from src.manifestparser import ManifestParser
+from src.servicemanager import ServiceManager
+from src.networkmanager import NetworkManager
 
 
 #--------------------------------------------------------------------------------
