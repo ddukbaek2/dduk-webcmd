@@ -1,0 +1,8 @@
+# Requirements.txt cannot contain Korean characters. (results in cp949 error)
+# Never use Korean characters.
+
+
+# service.
+python-dotenv
+dduk-core
+flask

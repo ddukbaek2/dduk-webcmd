@@ -1,0 +1,38 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug",
+            "type": "debugpy",
+            "request": "attach",
+            "preLaunchTask": "DEBUG_TASK",
+            "connect": {
+                "host": "localhost",
+                "port": "${config:pyappcore.debug.remotePort}"
+            },
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}",
+                    "remoteRoot": "."
+                }
+            ],
+        },
+        {
+            "name": "No Debug",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "cmd.exe",
+            "preLaunchTask": "PREBUILD_TASK",
+            "args": [
+                "/c",
+                "${workspaceFolder}/run.bat",
+                "source",
+                "${config:pyappcore.nodebug.symbols}",
+                "${config:pyappcore.nodebug.arguments}"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
