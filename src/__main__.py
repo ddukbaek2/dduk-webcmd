@@ -34,4 +34,4 @@ def Main(arguments : list) -> None:
 
 	# 서버 시작.
 	networkManager = Repository.Get(NetworkManager)
-	networkManager.Run("0.0.0.0", 5000)
+	networkManager.Run(manifestParser.Host, manifestParser.Port)

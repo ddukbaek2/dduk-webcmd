@@ -8,7 +8,7 @@ import os
 import subprocess
 import sys
 from http import HTTPStatus
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, request, jsonify, make_response, redirect, url_for
 from src.serviceinfo import ServiceInfo, ServiceState
 from src.servicemanager import ServiceManager
 from dduk.core import Repository
@@ -29,6 +29,8 @@ class NetworkManager:
 	#--------------------------------------------------------------------------------
 	def __init__(self) -> None:
 		self.__app = Flask("DDUK-SERVICES")
+		self.__app.add_url_rule("/", "VoidDocument", self.VoidDocument, methods = ["GET"])
+		self.__app.add_url_rule("/view", "ViewDocument", self.ViewDocument, methods = ["GET"])
 		self.__app.add_url_rule("/restart", "RestartService", self.RestartService, methods = ["GET"])
 		self.__app.add_url_rule("/start", "StartService", self.StartService, methods = ["GET"])
 		self.__app.add_url_rule("/stop", "StopService", self.StopService, methods = ["GET"])
@@ -44,9 +46,23 @@ class NetworkManager:
 
 
 	#--------------------------------------------------------------------------------
+	# 빈 화면.
+	#--------------------------------------------------------------------------------
+	def VoidDocument(self) -> Union[str, Tuple[str, int]]:
+		return redirect(url_for("ViewDocument"))
+
+
+	#--------------------------------------------------------------------------------
+	# 뷰 화면.
+	#--------------------------------------------------------------------------------
+	def ViewDocument(self) -> Union[str, Tuple[str, int]]:
+		return "", HTTPStatus.OK
+
+
+	#--------------------------------------------------------------------------------
 	# 서비스 재시작.
 	#--------------------------------------------------------------------------------
-	def RestartService() -> Union[str, Tuple[str, int]]:
+	def RestartService(self) -> Union[str, Tuple[str, int]]:
 		try:
 			serviceName = request.args.get("SERVICENAME")
 			serviceManager = Repository.Get(ServiceManager)
@@ -64,7 +80,7 @@ class NetworkManager:
 	#--------------------------------------------------------------------------------
 	# 서비스 시작.
 	#--------------------------------------------------------------------------------
-	def StartService() -> Union[str, Tuple[str, int]]:
+	def StartService(self) -> Union[str, Tuple[str, int]]:
 		try:
 			serviceName = request.args.get("SERVICENAME")
 			serviceManager = Repository.Get(ServiceManager)
@@ -84,7 +100,7 @@ class NetworkManager:
 	#--------------------------------------------------------------------------------
 	# 서비스 정지.
 	#--------------------------------------------------------------------------------
-	def StopService() -> Union[str, Tuple[str, int]]:
+	def StopService(self) -> Union[str, Tuple[str, int]]:
 		try:
 			serviceName = request.args.get("SERVICENAME")
 			serviceManager = Repository.Get(ServiceManager)
@@ -105,7 +121,7 @@ class NetworkManager:
 	#--------------------------------------------------------------------------------
 	# 서비스 상태 확인.
 	#--------------------------------------------------------------------------------
-	def StatusService() -> Union[str, Tuple[str, int]]:
+	def StatusService(self) -> Union[str, Tuple[str, int]]:
 		try:
 			serviceName = request.args.get("SERVICENAME")
 			serviceManager = Repository.Get(ServiceManager)
@@ -121,7 +137,7 @@ class NetworkManager:
 	#--------------------------------------------------------------------------------
 	# 서비스 목록 확인.
 	#--------------------------------------------------------------------------------
-	def ListServices() -> Union[str, Tuple[str, int]]:
+	def ListServices(self) -> Union[str, Tuple[str, int]]:
 		try:
 			serviceManager = Repository.Get(ServiceManager)
 			return jsonify(serviceManager.GetAllServices())

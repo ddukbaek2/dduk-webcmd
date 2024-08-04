@@ -153,14 +153,15 @@ exit /b 0
 	call "venv.bat" update
 
 	:: 빌드 전 처리 실행.
-	python "%SOURCEPATH%\__prebuilder__.py"
+	:: python "%SOURCEPATH%\__prebuilder__.py"
 
 	:: 변수 출력.
-	echo SOURCE_SYMBOLS: %SOURCE_SYMBOLS%
-	echo SOURCE_ARGUMENTS: %SOURCE_ARGUMENTS%
+	:: echo SOURCE_SYMBOLS: %SOURCE_SYMBOLS%
+	:: echo SOURCE_ARGUMENTS: %SOURCE_ARGUMENTS%
 
 	:: 런처 실행.
-	python "%SOURCEPATH%\__launcher__.py" "%SOURCE_SYMBOLS%" "%SOURCE_ARGUMENTS%"
+	:: python "%SOURCEPATH%\__launcher__.py" "%SOURCE_SYMBOLS%" "%SOURCE_ARGUMENTS%"
+
 exit /b 0
 
 
@@ -174,7 +175,7 @@ exit /b 0
 	set SERVICE_COMMAND=%ARGUMENT_2%
 
 	:: 서비스 명령.
-	call "service.bat" !SERVICE_COMMAND!
+	call "service.bat" %SERVICE_COMMAND%
 
 	:: 오류가 있으면 실패.
 	if not %errorlevel% equ 0 ( exit /b 1 )
