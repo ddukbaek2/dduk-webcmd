@@ -9,8 +9,8 @@ import subprocess
 import sys
 from http import HTTPStatus
 from flask import Flask, request, jsonify, make_response
-from .serviceinfo import ServiceInfo, ServiceState
-from .servicemanager import ServiceManager
+from src.serviceinfo import ServiceInfo, ServiceState
+from src.servicemanager import ServiceManager
 from dduk.core import Repository
 
 

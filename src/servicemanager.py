@@ -8,8 +8,8 @@ import os
 import subprocess
 import sys
 from threading import Thread
-from .manifestparser import ManifestParser
-from .serviceinfo import ServiceInfo, ServiceState
+from src.manifestparser import ManifestParser
+from src.serviceinfo import ServiceInfo, ServiceState
 
 
 
@@ -34,7 +34,7 @@ class ServiceManager:
 	# 서비스 매니저 시작.
 	#--------------------------------------------------------------------------------
 	def Run(self, manifestParser : ManifestParser) -> bool:
-		for name, executablePath in manifestParser.Services.itmes():
+		for name, executablePath in manifestParser.Services.items():
 			name = name.upper()
 			serviceInfo = ServiceInfo()
 			serviceInfo.ID = 1

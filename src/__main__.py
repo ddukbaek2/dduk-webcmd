@@ -4,27 +4,33 @@
 from __future__ import annotations
 from typing import Any, Final, Optional, Type, TypeVar, Union, Tuple, List, Dict, Set, cast
 import builtins
-import os
-import sys
 from dduk.core import Repository
+from src.datamanager import DataManager
 from .manifestparser import ManifestParser
 from .servicemanager import ServiceManager
 from .networkmanager import NetworkManager
 
 
 #--------------------------------------------------------------------------------
-# 파일 진입점.
+# 메인 함수.
 #--------------------------------------------------------------------------------
-if __name__ == "__main__":
+def Main(arguments : list) -> None:
+	
+	# 출력.
+	builtins.print("__MAIN__")
 	builtins.print("DDUK-SERVICES")
 
+	# 데이터 매니저 설정.
+	dataManager = Repository.Get(DataManager)
+	manifestFilePath = dataManager.GetResPathWithRelativePath("manifest.json")
+	
 	# 매니페스트 로드.
 	manifestParser = ManifestParser()
-	manifestParser.Parse("service.manifest")
+	manifestParser.Parse(manifestFilePath)
 
 	# 서비스 매니저 시작.
 	serviceManager = Repository.Get(ServiceManager)
-	serviceManager.Run()
+	serviceManager.Run(manifestParser)
 
 	# 서버 시작.
 	networkManager = Repository.Get(NetworkManager)

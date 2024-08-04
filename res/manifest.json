@@ -1,0 +1,20 @@
+{
+    "server": {
+        "ip": "0.0.0.0",
+        "port": 5000
+    },
+    "services": [
+        {
+            "name": "Altava_Conversion_ModelValidator_DEV",
+            "executablePath": "C:/Github/Altava_Conversion_ModelValidator_DEV/run-service-dev.bat"
+        },
+        {
+            "name": "Altava_Conversion_ModelValidator_TEST",
+            "executablePath": "C:/Github/Altava_Conversion_ModelValidator_TEST/run-service-test.bat"
+        },
+        {
+            "name": "Altava_Conversion_ModelValidator_LIVE",
+            "executablePath": "C:/Github/Altava_Conversion_ModelValidator_LIVE/run-service-live.bat"
+        }
+    ]
+}

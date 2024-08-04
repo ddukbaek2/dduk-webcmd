@@ -8,10 +8,8 @@
 		"**/Thumbs.db": true,
 		"**/__pycache__": true,
 		"**/.gitkeep": true,
-		"**/__pyappcore_*.py": true,
-		"**/__launcher__.py": true,
-		"**/__prebuilder__.py": true,
-		"**/__killer__.py": true,
+		// "**/__launcher__.py": true,
+		// "**/__killer__.py": true,
 		"**/__dummy__": true
 	},
 	"terminal.integrated.defaultProfile.windows": "Command Prompt",
